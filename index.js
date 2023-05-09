@@ -294,6 +294,7 @@ app.get("/admin", async (req, res) => {
 })
 
 app.get("/nope", (req, res) => {
+  res.status(403);
   res.render("nope");
 })
 
@@ -321,9 +322,7 @@ app.use(express.static(__dirname + "/public"));
 
 app.get("*", (req, res) => {
   res.status(404);
-  res.send(`Page not found - 404
-  <br>
-  <img src='/AngryOtter.jpg' style='width:250px;'>`);
+  res.render("404");
 });
 
 
