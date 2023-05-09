@@ -275,10 +275,10 @@ app.get("/in", async (req, res) => {
       .project({ username: 1 })
       .toArray();
     const username = result[0].username;
-
-    res.send(`<h1>You're in! ${username}</h1> <br> <img src=/${randomImage()} style='width:250px;'>
-	<br><br>
-	<button onclick=window.location.href='/logout'>Log Out</button> `);
+    res.render("in", {name: username})
+  //   res.send(`<h1>You're in! ${username}</h1> <br> <img src=/${randomImage()} style='width:250px;'>
+	// <br><br>
+	// <button onclick=window.location.href='/logout'>Log Out</button> `);
   }
 });
 
