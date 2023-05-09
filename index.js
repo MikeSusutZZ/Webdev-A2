@@ -283,8 +283,18 @@ app.get("/in", async (req, res) => {
 });
 
 app.get("/admin", async (req, res) => {
+  if (!req.session.authenticated) {
+    console.log("You're not supposed to be here yet")
+      res.redirect("/");
+    } else if(req.session.user_type != "admin"){
+      res.redirect("/nope");
+    }
   const dbRet = await userCollection.find().project({username: 1, _id: 1, user_type: 1}).toArray();
   res.render("admin", {users: dbRet});
+})
+
+app.get("/nope", (req, res) => {
+  res.render("nope");
 })
 
 function randomImage(){
@@ -297,6 +307,16 @@ function randomImage(){
 	return images[randomIndex];
 }
 
+app.get("/updateAdmin", async (req, res) => {
+  userCollection.updateOne({username: req.query.user}, {$set: {user_type: "admin"}});
+  res.redirect("/admin");
+})
+
+app.get("/updateBasic", async (req, res) => {
+  userCollection.updateOne({username: req.query.user}, {$set: {user_type: "basic"}});
+  res.redirect("/admin");
+})
+
 app.use(express.static(__dirname + "/public"));
 
 app.get("*", (req, res) => {
@@ -307,6 +327,6 @@ app.get("*", (req, res) => {
 });
 
 
-app.listen(3000, () => {
+app.listen(port, () => {
   console.log("Node application listening on port " + port);
 }); 
